@@ -1,0 +1,47 @@
+[tool.poetry]
+name = "workouts-backend"
+version = "0.1.0"
+description = "My workouts app backend."
+authors = ["Leonardo Chinelato <leochinelato9852@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.12.*"
+fastapi = {extras = ["standard"], version = "^0.115.6"}
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.8.3"
+pytest = "*"
+pytest-cov = "*"
+taskipy = "*"
+
+[tool.taskipy.tasks]
+run = 'fastapi dev workouts_backend/app.py'
+
+pre_test = 'task lint'
+test = 'pytest --cov=workouts_backend -vv'
+post_test = 'coverage html'
+
+lint = 'ruff check .; ruff check . --diff'
+format = 'ruff check . --fix; ruff format .'
+
+
+[tool.pytest.ini_options]
+pythonpath = "."
+addopts = '-p no:warnings'
+
+[tool.ruff]
+line-length = 79
+extend-exclude = ['migrations']
+
+[tool.ruff.lint]
+preview = true
+select = ['I', 'F', 'E', 'W', 'PL', 'PT']
+
+[tool.ruff.format]
+preview = true
+quote-style = 'single'
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
